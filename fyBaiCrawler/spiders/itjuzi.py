@@ -58,19 +58,22 @@ class ItJuZiSpider(scrapy.Spider):
     seed_url = "http://www.itjuzi.com/company/{company_id}"
     start_urls = []
 
-    MONGO_DB = "GIO"
-    MONGO_COLLECTION = "company_detail"
+    MONGO_STORE_COLLECTION = "company_detail"
+    MONGO_READ_COLLECTION = "ITjuzi"
+
+    # mongodb://user:password@example.com/the_database?authMechanism=MONGODB-CR
+    MONGO_URI = "mongodb://localhost:27017/GIO"
 
     custom_settings = {
         "ITEM_PIPELINES": {
             'fyBaiCrawler.pipelines.mongo_pipeline.MongoPipeline': 300,
         },
-        "DOWNLOAD_DELAY": 3,
+        "DOWNLOAD_DELAY": 10,
     }
 
     def start_requests(self):
-        keywords_source = FromMongo()
-        company_list = keywords_source.get_doc("GIO", "ITjuzi")
+        keywords_source = FromMongo(self.MONGO_URI)
+        company_list = keywords_source.get_doc(self.MONGO_READ_COLLECTION)
         for i, company in enumerate(company_list):
             if company.get("com_id"):
                 url = self.seed_url.format(company_id=company["com_id"])

@@ -4,13 +4,11 @@ import pymongo
 
 class MongoUtils(object):
 
-    def __init__(self, host='localhost', port=27017):
-        self.client = pymongo.MongoClient(host, port)
-        self.cursor = set()
+    def __init__(self, uri='mongodb://localhost:27017/bfy_test'):
+        self.client = pymongo.MongoClient(uri)
 
-    def get_collection(self, db, coll):
-        db = self.client[db]
-        return db[coll]
+    def get_collection(self, coll):
+        return self.client.get_default_database()[coll]
 
     def close(self):
         self.client.close()

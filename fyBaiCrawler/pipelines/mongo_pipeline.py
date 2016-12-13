@@ -18,18 +18,15 @@ class MongoException(Exception):
 
 class MongoPipeline(object):
 
-    def __init__(self):
-        self.mongo_client = MongoUtils()
-
     def open_spider(self, spider):
-        if not spider.MONGO_DB or not spider.MONGO_COLLECTION:
+        if not spider.MONGO_URI and not spider.MONGO_STORE_COLLECTION:
             raise MongoException('mongo db and collection must in spider, if you want active this pipeline.')
-
         self.excluded_fields = spider.EXCLUDED_FIELDS if hasattr(spider, "EXCLUDED_FIELDS") else ()
         if self.excluded_fields:
             assert isinstance(self.excluded_fields, set)
             logging.info('the spider excluded fields -> {fields}.'.format(fields=self.excluded_fields))
-        self.coll = self.mongo_client.get_collection(spider.MONGO_DB, spider.MONGO_COLLECTION)
+        self.mongo_client = MongoUtils(spider.MONGO_URI)
+        self.coll = self.mongo_client.get_collection(spider.MONGO_STORE_COLLECTION)
 
     def process_item(self, item, spider):
         doc = {}

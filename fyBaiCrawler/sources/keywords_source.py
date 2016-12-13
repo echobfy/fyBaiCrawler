@@ -11,11 +11,11 @@ class KeywordsSource(object):
 
 
 class FromMongo(KeywordsSource):
-    def __init__(self):
-        self.mongo_client = MongoUtils()
+    def __init__(self, mongo_uri):
+        self.mongo_client = MongoUtils(mongo_uri)
 
-    def get_doc(self, db, coll_name, mongo_id=None):
-        coll = self.mongo_client.get_collection(db, coll_name)
+    def get_doc(self, coll_name, mongo_id=None):
+        coll = self.mongo_client.get_collection(coll_name)
 
         if mongo_id:
             return coll.find({'_id': ObjectId(mongo_id)})
