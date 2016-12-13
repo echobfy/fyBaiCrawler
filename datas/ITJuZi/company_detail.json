@@ -1,0 +1,122 @@
+{
+    "_id" : "5840d1ae12f43c286d1af06b",
+    "com_prov" : "四川",      // done
+    "com_stage_id" : "1",
+    "tag" : [
+        {
+            "tag_name" : "亲子游",
+            "tag_id" : "127"
+        },
+        {
+            "tag_name" : "教育",
+            "tag_id" : "597"
+        },
+        {
+            "tag_name" : "儿童早教",
+            "tag_id" : "599"
+        },
+        {
+            "tag_name" : "幼教",
+            "tag_id" : "988"
+        }
+    ],
+    "com_sec_name" : "菁苗教育",    // done
+    "com_status_id" : "1",
+    "com_city" : "成都",        // done
+    "com_born_year" : "2016",   // done
+    "com_radar_juziindex" : "191",  // done
+    "similar_company" : [
+        {
+            "com_name" : "安琪艾可AngellEcho",
+            "com_logo" : "https://cdn.itjuzi.com/images/archive/952.png",
+            "com_id" : "952"
+        },
+        {
+            "com_name" : "爱早教网",
+            "com_logo" : "https://cdn.itjuzi.com/images/archive/2085.png",
+            "com_id" : "2085"
+        },
+        {
+            "com_name" : "悠游堂Yuyuto",
+            "com_logo" : "https://cdn.itjuzi.com/images/archive/8960.jpg",
+            "com_id" : "8960"
+        },
+        {
+            "com_name" : "宝宝地带",
+            "com_logo" : "https://cdn.itjuzi.com/images/com_logo_archive/15191.png",
+            "com_id" : "15191"
+        },
+        {
+            "com_name" : "央数文化-小熊尼奥",
+            "com_logo" : "https://cdn.itjuzi.com/images/b9e2e1a3e79e6bc3bc0140aaa3d6f219.jpg",
+            "com_id" : "15553"
+        }
+    ],
+    "com_cont_email" : "",
+    "product" : [
+        {
+            "com_pro_type_name" : "网站",
+            "com_pro_id" : "24262",
+            "com_pro_detail" : "一个亲子户外素质培养平台",
+            "com_pro_name" : "成都儿童团",
+            "com_pro_type_id" : "1"
+        }
+    ],
+    "subcat" : {
+        "cat_id" : "3",
+        "cat_name" : "儿童早教"
+    },
+    "com_logo_archive" : "https://cdn.itjuzi.com/images/b6516a8ae47fb609d9219ffc89944246.jpg",
+    "com_url" : "http://402100.kuaizhan.com/",    // done
+    "com_born_month" : "1",     // done
+    "com_id" : "53805",         // done
+    "news" : [
+        {
+            "com_new_month" : "11",
+            "com_new_name" : "千万注资打造西南最大亲子游学平台 成都儿童团吹响“兴趣社团”集结号",
+            "com_new_day" : "19",
+            "com_new_type_name" : "资本",
+            "com_new_year" : "2016",
+            "com_new_url" : "http://news.sina.com.cn/o/2016-11-19/doc-ifxxwsix4106836.shtml"
+        },
+        {
+            "com_new_month" : "11",
+            "com_new_name" : "我为什么投资 成都儿童团？",
+            "com_new_day" : "19",
+            "com_new_type_name" : "采访报道",
+            "com_new_year" : "2016",
+            "com_new_url" : "http://media.china.com.cn/cmyj/2016-11-19/903065.html"
+        }
+    ],
+    "com_cont_tel" : "",
+    "com_des" : "成都儿童团是成都商报旗下的亲子资讯网站，旨在集结成都当地的教育、旅游资源，产品包括教育资讯和社区两部分。成都菁苗教育科技股份有限公司旗下产品。",  // done
+    "com_video" : "",   // done
+    "com_registered_name" : "成都菁苗教育科技股份有限公司",   // done
+    "com_fund_needs_id" : "2",      // done
+    "invest" : [
+        {
+            "invse_similar_money_id" : "3",
+            "invse_year" : "2016",
+            "invse_currency_id" : "1",
+            "invse_round_id" : "11",
+            "invse_month" : "11",
+            "invse_round_name" : "战略投资",
+            "invse_detail_money" : "1000",
+            "investor" : [],
+            "invse_currency_name" : "人民币",
+            "invse_similar_money_name" : "数千万",
+            "investment" : [],
+            "invse_id" : "22335"
+        }
+    ],
+    "com_weibo_url" : "http://weibo.com/u/5970370396",
+    "cat" : {
+        "cat_id" : "1",
+        "cat_name" : "教育"
+    },
+    "com_cont_addr" : "",
+    "team" : [],
+    "com_logo" : "https://cdn.itjuzi.com/images/71d97672b1aee1f5ed167502332b78b1.jpg",  // done
+    "com_weixin_id" : "",
+    "com_name" : "成都儿童团"    // done
+}

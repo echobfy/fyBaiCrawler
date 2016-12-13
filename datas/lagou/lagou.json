@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "requestId": null,
+  "resubmitToken": null,
+  "msg": null,
+  "code": 0,
+  "content": {
+    "hasPreviousPage": false,
+    "pageNo": 1,
+    "pageSize": 15,
+    "totalCount": 1,
+    "hasNextPage": false,
+    "totalPageCount": 1,
+    "currentPageNo": 1,
+    "result": [
+      {
+        "positionNum": 29,
+        "interviewRemarkNum": 17,
+        "createTime": null,
+        "companyShortName": "GrowingIO",
+        "companyId": 77962,
+        "companyFullName": "北京易数科技有限公司",
+        "city": "北京",
+        "companyLogo": "i/image/M00/5E/0E/CgqKkVfqBfWAL_59AAIoyA78eo4677.png",
+        "financeStage": "成长型(A轮)",
+        "industryField": "企业服务,数据服务",
+        "approve": 1,
+        "companyFeatures": "创新秒级数据采集和分析解决方案，为产品快速迭代提供实时决策支持，致力于成为数据分析领域最靠谱服务商。",
+        "cityScore": 0,
+        "processRate": 59,
+        "countryScore": 0
+      }
+    ],
+    "start": 0
+  }
+}
