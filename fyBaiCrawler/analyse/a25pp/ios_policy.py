@@ -9,14 +9,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(PWD)))   # '/Users/bf
 sys.path.append(BASE_DIR)
 
 from fyBaiCrawler.utils.sys_utils import get_platform_command
+from . import AnaylsePolicy
 
 
-class Policy(object):
-    def anaylse(self, path):
-        raise NotImplemented
-
-
-class StringsPolicy(Policy):
+class StringsPolicy(AnaylsePolicy):
     keyword_2_company = {
         "UMTumeng_analytics": "友盟",
         "umeng_report_interval": "友盟",
@@ -53,7 +49,7 @@ class StringsPolicy(Policy):
         return companies
 
 
-class FileNameAnaylse(Policy):
+class FileNameAnaylse(AnaylsePolicy):
     files_name = {
         "umeng": "友盟",
         "talkingData": "TalkingData",
