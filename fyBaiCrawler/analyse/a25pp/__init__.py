@@ -38,10 +38,9 @@ class Anaylse(object):
 
     sheet_head = ("Apps", "下载链接", "友盟", "TalkingData", "Mixpanel", "GrowingIO", "神策", "诸葛")
     excel_writer = ExcelWriter("records.xls")
+    column_id_set = set()
 
     def __init__(self):
-
-        self.column_id_set = set()
         self.anaylse_policies = ()
 
     def decompression(self, app_path, unzip_dir):

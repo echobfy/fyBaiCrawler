@@ -73,8 +73,15 @@ if __name__ == '__main__':
 
     manager = multiprocessing.Manager()
     queue = manager.Queue()
-    max_i = anaylse.anaylse(processes_pool, queue)
-    anaylse.record_results(queue, max_i)
+
+    try:
+        max_i = anaylse.anaylse(processes_pool, queue)
+        anaylse.record_results(queue, max_i)
+    except Exception, e:
+        import traceback
+        traceback.print_exc()
+        processes_pool.close()
+        processes_pool.join()
 
 
 
