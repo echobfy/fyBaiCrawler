@@ -12,16 +12,13 @@ def f(x):
 
 
 cores = multiprocessing.cpu_count()
-print cores
 
 pool = multiprocessing.Pool(processes=cores)
-xs = range(5)
+xs = range(10)
 
 
 cnt = 0
-for _ in pool.imap_unordered(f, xs):
-    sys.stdout.write('done %d/%d\r' % (cnt, len(xs)))
-    sys.stdout.flush()
-    time.sleep(2)
+for a in pool.imap_unordered(f, xs):
+    print  a
     cnt += 1
 

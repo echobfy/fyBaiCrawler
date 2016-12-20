@@ -17,7 +17,7 @@ sys.path.append(BASE_DIR)
 
 
 from fyBaiCrawler.utils.excel_utils import ExcelWriter
-from fyBaiCrawler.analyse.a25pp.policy import *
+from fyBaiCrawler.analyse.a25pp.ios_policy import *
 
 
 logging.basicConfig(

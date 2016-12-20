@@ -4,10 +4,6 @@ import sys
 import commands
 import logging
 
-PWD = os.getcwd()
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(PWD)))   # '/Users/bfy/Documents/python/fyBaiCrawler'
-sys.path.append(BASE_DIR)
-
 from fyBaiCrawler.utils.sys_utils import get_platform_command
 from . import AnaylsePolicy
 

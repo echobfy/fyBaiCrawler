@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import xlwt
+import logging
 
 
 class ExcelWriter(object):
@@ -8,6 +9,8 @@ class ExcelWriter(object):
     def __init__(self, file_name="records.xls"):
         self.file_name = file_name
         self.fp = xlwt.Workbook(encoding='utf-8')
+
+        # default_sheet = self.fp.add_sheet('default_sheet')
 
         self.name2sheet = {}
 
