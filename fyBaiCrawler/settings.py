@@ -27,7 +27,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+# DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -96,12 +96,12 @@ DOWNLOADER_MIDDLEWARES = {
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# LOG_FILE = os.path.join(BASE_DIR, "logs/25pp/f25pp.log")
-#
-# if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
-#     os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
-# LOG_ENABLED = False
-# LOG_LEVEL = "INFO"
+LOG_FILE = os.path.join(BASE_DIR, "logs/25pp/b_android.log")
+
+if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
+    os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
+LOG_ENABLED = False
+LOG_LEVEL = "INFO"
 
 
 

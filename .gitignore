@@ -1,5 +1,6 @@
 # datas
 *.ipa
+*.apk
 
 # mac
 .idea/

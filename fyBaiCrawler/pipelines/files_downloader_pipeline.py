@@ -14,6 +14,7 @@ class FilesDownloaderPipeline(FilesPipeline):
     def __init__(self, store_uri, download_func=None, settings=None):
         super(FilesDownloaderPipeline, self).__init__(store_uri, settings=settings, download_func=download_func)
         self.store_file_path = os.path.join(settings["BASE_DIR"], settings['FILES_STORE'])
+        self.suffix = settings['suffix']
 
     def handle_redirect(self, file_url):
         """
@@ -28,12 +29,12 @@ class FilesDownloaderPipeline(FilesPipeline):
         return file_url
 
     def get_media_requests(self, item, info):
-        path = item['app_name'].replace("/", "_") + '.ipa'
+        path = item['app_name'].replace("/", "_") + self.suffix
         if is_file_exists(os.path.join(self.store_file_path, path)):
             item['files'] = [{'url': item['app_downurl'], 'path': path, 'checksum': ''}]
-            logging.debug('{file} already exists, and dont download twice.'.format(file=item['app_name']))
+            logging.debug('{file} already exists, and dont download twice.'.format(file=path))
             return
-        logging.info('{file} not exist, downloading......'.format(file=item['app_name']))
+        logging.info('{file} not exist, downloading......'.format(file=path))
         redirect_url = self.handle_redirect(item["file_urls"][0])
         yield scrapy.Request(redirect_url, meta={'app_name': item['app_name']})
 
@@ -44,6 +45,6 @@ class FilesDownloaderPipeline(FilesPipeline):
 
     def file_path(self, request, response=None, info=None):
         app_name = request.meta['app_name'].replace('/', '_')  # 将文件名中的'/'替换掉
-        return "%s%s" % (app_name, ".ipa")
+        return "%s%s" % (app_name, self.suffix)
 
 

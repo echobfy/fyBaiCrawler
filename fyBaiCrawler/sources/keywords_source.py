@@ -19,7 +19,7 @@ class FromMongo(KeywordsSource):
 
         if mongo_id:
             return coll.find({'_id': ObjectId(mongo_id)})
-        return coll.find()
+        return coll.find(timeout=False)
 
     def close(self):
         self.mongo_client.close()

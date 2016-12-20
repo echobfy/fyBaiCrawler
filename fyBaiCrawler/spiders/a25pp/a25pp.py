@@ -2,109 +2,100 @@
 import json
 import os
 import logging
-import base64
 import scrapy
 from scrapy.http import Request
-from scrapy.cmdline import execute
 
 from bs4 import BeautifulSoup
 from fyBaiCrawler.items import D25APPItem
 from fyBaiCrawler.items import F25APPItem
 
 
-FILE_NAME_FOR_25PP = "datas/25pp/25pp.txt"
-FILE_NAME_FOR_DOWNLOAD_25PP = "datas/25pp/25pp_apps_downloader.txt"
+class Top25ppSpider(scrapy.Spider):
+    name = ''
+
+    RESULT_FILE_DIRECTORY = 'datas/25pp'
+    LOGS_FILE_DIRECTORY = 'logs/25pp'
+    APP_STORE_DIRECTORY = 'datas/25pp/apps'
 
 
-if __name__ == '__main__':
-    execute(['scrapy', 'crawl', 'f25pp'])
-
-
-class D25ppSpider(scrapy.Spider):
+class A25ppSpider(Top25ppSpider):
     """
     抓取25pp网站, 10个类别, 每个类别前5页的app的越狱版的链接
     将下载下来的记录记在在custom_settings中的file_name文件里
     """
-    name = "d25pp"
+    name = ''
+    seed_url = ''
+    column_id_2_name = {}
 
-    seed_url = 'http://www.25pp.com/ios/soft/fenlei/3/{column_id}_0_2/{page}'
-    start_urls = [
-    ]
+    FETCH_PAGE = range(1, 6)
+
+    RESULT_FILE_NAME = os.path.join(Top25ppSpider.RESULT_FILE_DIRECTORY, name + ".txt")
+    LOGS_FILE_NAME = os.path.join(Top25ppSpider.LOGS_FILE_DIRECTORY, name + ".log")
 
     custom_settings = {
-        "file_name": FILE_NAME_FOR_25PP,
+        "file_name": RESULT_FILE_NAME,
 
         "LOG_ENABLED": "True",
-        "LOG_FILE": "logs/25pp/%s.log" % name,
+        "LOG_FILE": LOGS_FILE_NAME,
 
         "ITEM_PIPELINES": {
             'fyBaiCrawler.pipelines.file_pipeline.FilePipeline': 300,
         }
     }
 
-    column_id = range(1, 10)
-    column_id.append(33)
-
-    def start_requests(self):
-        for i in self.column_id:
-            for j in range(1, 6):
+    def construct_start_urls(self):
+        for i in self.column_id_2_name.keys():
+            for j in self.FETCH_PAGE:
                 self.start_urls.append((self.seed_url.format(column_id=i, page=j), i, j))
 
+    def start_requests(self):
+        self.construct_start_urls()
         for i, (start_url, column_id, page_number) in enumerate(self.start_urls):
             logging.info('{number} -> fetching {url}......'.format(number=i, url=start_url))
             yield Request(start_url, meta={'column_id': column_id, 'page_number':  page_number})
+            if self.settings.get('TEST', False):
+                break
 
     def parse(self, response):
+        raise NotImplemented
+
+    def parse_common(self, response, attrs={}, **kwargs):
         soup = BeautifulSoup(response.text, "html.parser")
-        records = soup.find_all('a', text="越狱版", attrs={"class": "btn-install-x"})
+        records = soup.find_all('a', attrs=attrs, **kwargs)
 
         for ranking, record in enumerate(records):
             app_downurl = record.get('appdownurl')
             app_name = record.get('appname')
 
             if not (app_downurl and app_name):
-                logging.warning("no appdownurl in {app_name} with {url}!!!!!!".format(app_name=app_name, url=response.url))
+                logging.warning(
+                    "no appdownurl in {app_name} with {url}!!!!!!".format(app_name=app_name, url=response.url))
                 continue
+            yield (ranking, app_name, app_downurl)
 
-            app_real_downurl = base64.decodestring(app_downurl)
-
-            real_ranking = ranking + (response.meta['page_number'] - 1) * 48  # 每个app的全局排名, 每页app有48个, 在当前页排名为ranking
-            item = D25APPItem(app_downurl=app_real_downurl, app_name=app_name,
-                              column_id=response.meta['column_id'], ranking=real_ranking)
-            yield item
+    def construct_item(self, app_downurl, app_name, column_id, ranking):
+        item = D25APPItem(app_downurl=app_downurl, app_name=app_name,
+                          column_id=column_id, ranking=ranking)
+        return item
 
 
-class F25ppSpider(scrapy.Spider):
+class B25ppSpider(scrapy.Spider):
     """
     根据本文件上面的爬虫抓取下来的app的链接, 去将这些app全部下载下来
     同时将下载结果记录下custom_settings的file_name中, 下载的app文件在FILES_STORE中
     """
-    name = "f25pp"
+    name = ''
 
     start_urls = [
         'http://www.i_just_a_fake_spider.com'
     ]
 
-    custom_settings = {
-        "CONCURRENT_REQUESTS": 32,
-        "DOWNLOAD_DELAY": 1,
-
-        "file_name": FILE_NAME_FOR_DOWNLOAD_25PP,
-        "FILES_STORE": 'datas/25pp/apps',
-
-        "DOWNLOAD_TIMEOUT": 180 * 20,  # 放宽到一个小时
-        "DOWNLOAD_MAXSIZE": 5 * 1024 * 1024 * 1024,  # 最大可达5G
-
-        "ITEM_PIPELINES": {
-            'fyBaiCrawler.pipelines.file_pipeline.FilePipeline': 300,
-            'fyBaiCrawler.pipelines.files_downloader_pipeline.FilesDownloaderPipeline': 1,
-        }
-    }
+    RESULT_FILE_NAME = ''
 
     def open_25pp(self):
         base_dir = self.settings.get("BASE_DIR")
         apps = []
-        fp = open(os.path.join(base_dir, FILE_NAME_FOR_25PP), "r")
+        fp = open(os.path.join(base_dir, self.RESULT_FILE_NAME), "r")
         for line in fp:
             apps.append(json.loads(line))
         return apps
@@ -114,6 +105,8 @@ class F25ppSpider(scrapy.Spider):
         for i, app in enumerate(apps):
             logging.info("deal with ------------------- {number} --------------------".format(number=i))
             yield Request(self.start_urls[0], meta={"app": app, 'fake_url': True}, dont_filter=True)  # 声东击西, 请求这个url实际没什么卵用
+            if self.settings.get('TEST', False):
+                break
 
     def parse(self, response):
         app_name = response.meta['app']['app_name']
