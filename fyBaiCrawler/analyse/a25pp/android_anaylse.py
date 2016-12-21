@@ -33,7 +33,7 @@ class AndroidAnaylse(Anaylse):
 
     column_id_2_name = Apk1Spider.column_id_2_name
 
-    sheet_head = ("Apps", "下载链接", "GrowingIO", "百度", "友盟", "Google", "诸葛", "诸葛", "TalkingData", "腾讯", "Flurry", "Mixpanel")
+    sheet_head = ("Apps", "下载链接", "GrowingIO", "百度", "友盟", "Google", "诸葛", "神策", "TalkingData", "腾讯", "Flurry", "Mixpanel")
 
     def __init__(self):
         super(AndroidAnaylse, self).__init__()
@@ -67,7 +67,7 @@ class AndroidAnaylse(Anaylse):
 if __name__ == '__main__':
     anaylse = AndroidAnaylse()
 
-    cores = multiprocessing.cpu_count()
+    cores = multiprocessing.cpu_count() * 2
     logging.info(' ---> start {cores} processes in pool.'.format(cores=cores))
     processes_pool = multiprocessing.Pool(processes=cores)
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         import traceback
         traceback.print_exc()
         processes_pool.close()
-        processes_pool.join()
+        processes_pool.terminate()
 
 
 

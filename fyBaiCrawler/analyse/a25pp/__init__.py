@@ -153,7 +153,11 @@ class Anaylse(object):
 
     def record_results(self, queue, max_i):
         for i in range(0, max_i + 1):
-            instance, status, anaylse_results, kwargs = queue.get(True)
+            try:
+                instance, status, anaylse_results, kwargs = queue.get(True, 10)
+            except Exception, e:
+                logging.warning('queue get timeout????')
+                continue
             if status != 0:
                 continue
             app_name = kwargs.get('app_name')
