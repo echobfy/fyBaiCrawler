@@ -38,7 +38,7 @@ class CompanyListSpider(scrapy.Spider):
     ]
 
     # ACCESS_TOKEN = "your_access_token"
-    ACCESS_TOKEN = "iRn3rlSXKLiXjsVqsSbXOtVt2jVY0QLVMp1DT4UVCZ63q82MjGuHAEyOmePbuja5"
+    ACCESS_TOKEN = "gRerzmg8XyBrZYDDflZ65R6VBbbhrsieCWPjfGTxlWk8wsuJEAEivjkxsV51WTeI"
 
     custom_settings = {
         "ITEM_PIPELINES": {

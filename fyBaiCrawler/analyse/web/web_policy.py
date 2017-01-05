@@ -2,6 +2,14 @@
 from fyBaiCrawler.analyse import AnaylsePolicy
 
 
+def reverse_map(origin_map):
+    result_map = {}
+    for key, values in origin_map.items():
+        for value in values:
+            result_map[value] = key
+    return result_map
+
+
 class WebAnaylsePolicy(AnaylsePolicy):
     """对于Web分析存在两种策略
         1. 执行JS，判断是否有加载了目标站点的JS代码    （优先）
@@ -17,6 +25,10 @@ class WebAnaylsePolicy(AnaylsePolicy):
     }
 
     def anaylse(self, page_data):
+        """
+        :param page_data: 格式为[{content: ..., url: ...}, .... ]
+        :return: 返回{"company1": [x, y, z, ...], "company2": [x, y, z, ...], ......}
+        """
         raise NotImplemented
 
 
@@ -36,11 +48,19 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
         "神策": ["sensorsdata.cn"],               # http://www.okoer.com/
         "TalkingData": ["talkingdata.com"],
         "腾讯": ["tajs.qq.com"],
-        "mixpanel": []
+        "mixpanel": ["mixpanel"]
     }
 
+    url_2_company = reverse_map(companies_url)
+
     def anaylse(self, page_data):
-        pass
+        anaylse_result = {}
+        for page in page_data:
+            for url in self.url_2_company.keys():
+                if url in page['url']:
+                    lst = anaylse_result.setdefault(self.url_2_company[url], [])
+                    lst.append(url)
+        return anaylse_result
 
 
 class ContentAnaylsePolicy(WebAnaylsePolicy):
@@ -63,8 +83,16 @@ class ContentAnaylsePolicy(WebAnaylsePolicy):
         "mixpanel": []
     }
 
+    keyword_2_company = reverse_map(companies_keyword)
+
     def anaylse(self, page_data):
-        pass
+        anaylse_result = {}
+        for page in page_data:
+            for keyword in self.keyword_2_company.keys():
+                if keyword in page['content']:
+                    lst = anaylse_result.setdefault(self.keyword_2_company[keyword], [])
+                    lst.append(keyword)
+        return anaylse_result
 
 
 
