@@ -5,7 +5,7 @@ import commands
 import logging
 
 from fyBaiCrawler.utils.sys_utils import get_platform_command
-from . import AnaylsePolicy
+from .. import AnaylsePolicy
 
 
 class StringsPolicy(AnaylsePolicy):

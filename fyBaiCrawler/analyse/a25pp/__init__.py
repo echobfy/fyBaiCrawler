@@ -26,11 +26,6 @@ logging.basicConfig(
 )
 
 
-class AnaylsePolicy(object):
-    def anaylse(self, path):
-        raise NotImplemented
-
-
 class Anaylse(object):
     FILE_NAME = ''
     APPS_DIR = ''

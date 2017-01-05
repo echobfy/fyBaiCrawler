@@ -2,7 +2,7 @@
 import os
 import logging
 
-from fyBaiCrawler.analyse.a25pp import AnaylsePolicy
+from fyBaiCrawler.analyse import AnaylsePolicy
 
 
 class FileNamePolicy(AnaylsePolicy):

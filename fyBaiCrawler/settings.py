@@ -58,9 +58,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+EXTENSIONS = {
+   'scrapy.extensions.telnet.TelnetConsole': None,
+}
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
@@ -96,12 +96,12 @@ DOWNLOADER_MIDDLEWARES = {
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-LOG_FILE = os.path.join(BASE_DIR, "logs/25pp/b_android.log")
-
-if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
-    os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
-LOG_ENABLED = False
-LOG_LEVEL = "INFO"
+# LOG_FILE = os.path.join(BASE_DIR, "logs/25pp/b_android.log")
+#
+# if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
+#     os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
+# LOG_ENABLED = False
+# LOG_LEVEL = "INFO"
 
 
 
