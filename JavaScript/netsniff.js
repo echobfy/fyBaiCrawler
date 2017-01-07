@@ -30,51 +30,23 @@ function createHAR(address, title, startTime, resources)
         // they aren't included in specification
         if (request.url.match(/(^data:image\/.*)/i)) {
             return;
-	}
+	    }
 
         entries.push({
             startedDateTime: request.time.toISOString(),
             time: endReply.time - request.time,
-            request: {
-                method: request.method,
-                url: request.url,
-                httpVersion: "HTTP/1.1",
-                cookies: [],
-                headers: request.headers,
-                queryString: [],
-                headersSize: -1,
-                bodySize: -1
-            },
             response: {
+                url: request.url,
                 status: endReply.status,
-                statusText: endReply.statusText,
-                httpVersion: "HTTP/1.1",
-                cookies: [],
-                headers: endReply.headers,
-                redirectURL: "",
-                headersSize: -1,
                 bodySize: startReply.bodySize,
-                content: {
-                    size: startReply.bodySize,
-                    mimeType: endReply.contentType
-                }
-            },
-            cache: {},
-            timings: {
-                blocked: 0,
-                dns: -1,
-                connect: -1,
-                send: 0,
-                wait: startReply.time - request.time,
-                receive: endReply.time - startReply.time,
-                ssl: -1
+                mimeType: endReply.contentType
             },
             pageref: address
         });
     });
 
     return {
-        log: {
+        HelloWorld: {
             version: '1.2',
             creator: {
                 name: "PhantomJS",

@@ -45,7 +45,7 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
         ],
         "友盟": ["cnzz.com"],                     # http://bbs.ngacn.cc/
         "诸葛": ["zhugeio.com"],                  # http://www.xin.com/beijing/
-        "神策": ["sensorsdata.cn"],               # http://www.okoer.com/
+        "神策": ["sensorsdata.cn", "sensorsdata"],               # http://www.okoer.com/
         "TalkingData": ["talkingdata.com"],
         "腾讯": ["tajs.qq.com"],
         "mixpanel": ["mixpanel"]
@@ -56,8 +56,9 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
     def anaylse(self, page_data):
         anaylse_result = {}
         for page in page_data:
+            response = page['response']
             for url in self.url_2_company.keys():
-                if url in page['url']:
+                if url in response['url']:
                     lst = anaylse_result.setdefault(self.url_2_company[url], [])
                     lst.append(url)
         return anaylse_result
@@ -88,8 +89,9 @@ class ContentAnaylsePolicy(WebAnaylsePolicy):
     def anaylse(self, page_data):
         anaylse_result = {}
         for page in page_data:
+            response = page['response']
             for keyword in self.keyword_2_company.keys():
-                if keyword in page['content']:
+                if keyword in response['content']:
                     lst = anaylse_result.setdefault(self.keyword_2_company[keyword], [])
                     lst.append(keyword)
         return anaylse_result

@@ -37,8 +37,7 @@ class CompanyListSpider(scrapy.Spider):
         "http://openapi.itjuzi.com/company/get_company_list"
     ]
 
-    # ACCESS_TOKEN = "your_access_token"
-    ACCESS_TOKEN = "gRerzmg8XyBrZYDDflZ65R6VBbbhrsieCWPjfGTxlWk8wsuJEAEivjkxsV51WTeI"
+    ACCESS_TOKEN = "your_access_token"
 
     custom_settings = {
         "ITEM_PIPELINES": {
