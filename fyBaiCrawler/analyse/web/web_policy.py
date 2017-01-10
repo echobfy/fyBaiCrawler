@@ -17,11 +17,11 @@ class WebAnaylsePolicy(AnaylsePolicy):
     """
     analysis_helper_web = {
         "友盟": "http://help.cnzz.com/support/kuaisuanzhuangdaima/",
-        "诸葛IO": "http://help.zhugeio.com/hc/kb/article/98401/",
+        "诸葛": "http://help.zhugeio.com/hc/kb/article/98401/",
         "神策": "https://www.sensorsdata.cn/manual/js_sdk.html",
         "TalkingData": "http://doc.talkingdata.com/posts/36",
         "腾讯": "http://v2.ta.qq.com/bind/site",
-        "mixpanel": "https://mixpanel.com/help/reference/javascript"
+        "Mixpanel": "https://mixpanel.com/help/reference/javascript"
     }
 
     def anaylse(self, page_data):
@@ -37,7 +37,7 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
     """
     companies_url = {
         "GrowingIO": ["dn-growing.qbox.me"],        # http://www.hunliji.com/
-        "Baidu": ["hm.baidu.com"],                  # http://www.thepaper.cn/
+        "百度": ["hm.baidu.com"],                  # http://www.thepaper.cn/
         "Google": [
             "googletagservices.com",            # http://www.hupu.com/
             "google-analytics.com",              # http://bbs.ngacn.cc/
@@ -48,19 +48,25 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
         "神策": ["sensorsdata.cn", "sensorsdata"],               # http://www.okoer.com/
         "TalkingData": ["talkingdata.com"],
         "腾讯": ["tajs.qq.com"],
-        "mixpanel": ["mixpanel"]
+        "Mixpanel": ["mixpanel"],
+        "Flurry": []
     }
 
     url_2_company = reverse_map(companies_url)
 
     def anaylse(self, page_data):
         anaylse_result = {}
+        for key, _ in self.companies_url.items():
+            anaylse_result[key] = []
+
+        filter = self.url_2_company.keys()
         for page in page_data:
             response = page['response']
-            for url in self.url_2_company.keys():
+            for url in filter:
                 if url in response['url']:
                     lst = anaylse_result.setdefault(self.url_2_company[url], [])
                     lst.append(url)
+                    filter.remove(url)
         return anaylse_result
 
 
@@ -70,7 +76,7 @@ class ContentAnaylsePolicy(WebAnaylsePolicy):
     """
     companies_keyword = {
         "GrowingIO": [],
-        "Baidu": [],
+        "百度": [],
         "Google": [],
         "友盟": [],
         "诸葛": [],
@@ -81,7 +87,8 @@ class ContentAnaylsePolicy(WebAnaylsePolicy):
         ],
         "TalkingData": [],
         "腾讯": [],
-        "mixpanel": []
+        "Mixpanel": [],
+        "Flurry": []
     }
 
     keyword_2_company = reverse_map(companies_keyword)

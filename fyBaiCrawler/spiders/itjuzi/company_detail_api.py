@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
 import scrapy
+import logging
 from scrapy import Field
+from scrapy.cmdline import execute
 from scrapy.http.request.form import FormRequest
 from fyBaiCrawler.utils.mongo_utils import MongoUtils
 from fyBaiCrawler.spiders.itjuzi.company_list_api import CompanyListSpider
+
+
+if __name__ == '__main__':
+    execute(['scrapy', 'crawl', 'itjuzi_company_detail'])
 
 
 class CompanyDetailItem(scrapy.Item):
@@ -29,6 +35,7 @@ class CompanyDetailItem(scrapy.Item):
     com_cont_tel = Field()
     com_cont_email = Field()
     com_cont_addr = Field()
+    com_des = Field()
 
     cat = Field()
     subcat = Field()
@@ -41,13 +48,13 @@ class CompanyDetailItem(scrapy.Item):
 
 
 class CompanyDetailSpider(scrapy.Spider):
-    name = "itjuzi_company_list"
+    name = "itjuzi_company_detail"
 
     start_urls = [
         "http://openapi.itjuzi.com/company/get_company_info"
     ]
 
-    ACCESS_TOKEN = "your_access_token"
+    ACCESS_TOKEN = "xxxxxxxx"
 
     custom_settings = {
         "ITEM_PIPELINES": {
@@ -63,8 +70,10 @@ class CompanyDetailSpider(scrapy.Spider):
         mongo_client = MongoUtils(uri=self.MONGO_URI)
         mongo_collection = mongo_client.get_collection(CompanyListSpider.MONGO_STORE_COLLECTION)
         for start_url in self.start_urls:
-            for doc in mongo_collection.find():
+            for i, doc in enumerate(mongo_collection.find()):
                 if not doc.get('com_id'):
+                    logging.warning(' ---> no com_id in doc for {com_id}:{com_name}.'.
+                                    format(com_id=doc.get('com_id'), com_name=doc.get('com_name')))
                     continue
                 yield FormRequest(start_url,
                                   headers={
@@ -72,13 +81,21 @@ class CompanyDetailSpider(scrapy.Spider):
                                   },
                                   formdata={
                                       "com_id": doc['com_id'],
+                                  },
+                                  meta={
+                                      'com_name': doc.get('com_id'),
+                                      'com_id': doc.get('com_name')
                                   }
                 )
+                if i > 1:
+                    break
         mongo_client.close()
 
     def parse(self, response):
         record = json.loads(response.body).get('data', {})
         if not record:
+            logging.warning(' ----> no thing in response for {com_id}:{com_name}.'
+                            .format(com_id=response.meta.get('com_id'), com_name=response.meta.get('com_name')))
             return
 
         item = CompanyDetailItem()

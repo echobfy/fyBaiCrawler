@@ -37,13 +37,13 @@ class CompanyListSpider(scrapy.Spider):
         "http://openapi.itjuzi.com/company/get_company_list"
     ]
 
-    ACCESS_TOKEN = "your_access_token"
+    ACCESS_TOKEN = "xxxxxxxx"
 
     custom_settings = {
         "ITEM_PIPELINES": {
             'fyBaiCrawler.pipelines.mongo_pipeline.MongoPipeline': 300,
         },
-        "DOWNLOAD_DELAY": 3,
+        # "DOWNLOAD_DELAY": 3,
     }
 
     MONGO_URI = "mongodb://localhost:27017/itjuzi"

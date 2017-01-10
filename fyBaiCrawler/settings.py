@@ -98,16 +98,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # ------------------------ PhantomJS -----------------------------
 PHATOMJS_SLEEPING = 10
-PHATOMJS_INSTANCES = 10
+PHATOMJS_INSTANCES = 15
 PHANTOMJS_OPTIONS = ['--load-images=false', '--ignore-ssl-errors=true', '--webdriver-loglevel=no', '--webdriver-logfile=phantomjs.log']
 JAVASCRIPT_FILE = '/JavaScript/netsniff.js'
 
-# LOG_FILE = os.path.join(BASE_DIR, "logs/25pp/b_android.log")
+# LOG_FILE = os.path.join(BASE_DIR, "logs/wandoujia/wandoujia_apk.log")
+# LOG_FILE = os.path.join(BASE_DIR, "logs/itjuzi/wandoujia_apk.log")
 #
 # if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
 #     os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
 # LOG_ENABLED = False
-# LOG_LEVEL = "INFO"
+# LOG_LEVEL = "DEBUG"
 
 
 
