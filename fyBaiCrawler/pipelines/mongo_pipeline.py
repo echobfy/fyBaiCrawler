@@ -47,6 +47,7 @@ class MongoPipeline(object):
             self.succ_coll.insert(doc)
         elif self.fail_coll and item.__class__.__name__ == self.fail_coll_str:
             self.fail_coll.insert(doc)
+        # return item
 
     def close_spider(self, spider):
         self.mongo_client.close()

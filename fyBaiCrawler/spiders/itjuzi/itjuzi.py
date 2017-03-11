@@ -6,7 +6,6 @@ from scrapy.cmdline import execute
 from scrapy.http import Request
 
 from bs4 import BeautifulSoup
-from fyBaiCrawler.sources.keywords_source import FromMongo
 
 # @see https://www.itjuzi.com/company/24460
 

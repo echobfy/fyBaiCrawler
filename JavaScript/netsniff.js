@@ -68,10 +68,11 @@ function createHAR(address, title, startTime, resources)
 
 var page = require('webpage').create(),
     system = require('system');
+page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36';
 
 if (system.args.length === 1) {
     console.log('Usage: netsniff.js <some URL>');
-    phantom.exit(1);
+    phantom.exit(2);
 } else {
 
     page.address = system.args[1];
@@ -96,6 +97,11 @@ if (system.args.length === 1) {
         if (res.stage === 'end') {
             page.resources[res.id].endReply = res;
         }
+    };
+
+    page.settings.resourceTimeout = 8000;
+    page.onResourceTimeout = function (e) {
+        // if timeout, ignoring this response.
     };
 
     page.open(page.address, function (status) {

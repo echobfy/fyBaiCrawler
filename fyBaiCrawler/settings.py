@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'fyBaiCrawler.spiders'
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36"
 
 # Obey robots.txt rules
-# ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
@@ -97,18 +97,16 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # ------------------------ PhantomJS -----------------------------
-PHATOMJS_SLEEPING = 10
-PHATOMJS_INSTANCES = 15
-PHANTOMJS_OPTIONS = ['--load-images=false', '--ignore-ssl-errors=true', '--webdriver-loglevel=no', '--webdriver-logfile=phantomjs.log']
-JAVASCRIPT_FILE = '/JavaScript/netsniff.js'
+PHANTOMJS_OPTIONS = ['--load-images=false', '--ignore-ssl-errors=true', '--webdriver-logfile=phantomjs.log']
+JAVASCRIPT_FILE = '/javascript/netsniff.js'
 
-# LOG_FILE = os.path.join(BASE_DIR, "logs/wandoujia/wandoujia_apk.log")
-# LOG_FILE = os.path.join(BASE_DIR, "logs/itjuzi/wandoujia_apk.log")
-#
-# if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
-#     os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
-# LOG_ENABLED = False
-# LOG_LEVEL = "DEBUG"
+LOG_FILE = os.path.join(BASE_DIR, "logs/itjuzi/itjuzi_detail.log")
+# LOG_FILE = os.path.join(BASE_DIR, "logs/itjuzi/itjuzi_detail.log")
+
+if not os.path.exists(LOG_FILE[0: LOG_FILE.rfind("/")]):
+    os.mkdir(LOG_FILE[0: LOG_FILE.rfind("/")])
+LOG_ENABLED = False
+LOG_LEVEL = "DEBUG"
 
 
 

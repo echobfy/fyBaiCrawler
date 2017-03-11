@@ -5,6 +5,7 @@ import pycurl
 import json
 import time
 import datetime
+from bson.objectid import ObjectId
 
 import sys
 reload(sys)
@@ -30,22 +31,16 @@ class ESIndex(object):
 
 if __name__ == '__main__':
     es = ESIndex()
-    mongo_client = MongoUtils("mongodb://10.13.93.251:27017/DB973")
+    mongo_client = MongoUtils("mongodb://localhost:27017/itjuzi")
     print 'connected mongodb'
-    coll = mongo_client.get_collection("BaiduNews")
+    coll = mongo_client.get_collection("company_detail")
+
     for i, doc in enumerate(coll.find()):
-        # doc['downDate'] = doc['downDate'].strftime('%Y-%m-%d %H:%M:%S')
-        doc['pubDate'] = int(time.mktime(doc['pubDate'].timetuple()) * 1000)
-        doc['downDate'] = int(time.mktime(datetime.datetime.strptime(doc['downDate'], '%Y-%m-%d %H:%M:%S').timetuple()) * 1000)
-        doc['_id'] = str(doc['_id'])
-        doc['mongoId'] = doc['_id']
+        print doc['_id']
         del doc['_id']
 
-        print i
-        if not doc['content']: continue
-        es.index("10.13.93.251:9200/huaner/baidu", doc)
-        # break
-
+        es.index("localhost:9200/company/itjuzi", doc)
+    mongo_client.close()
 
 
 

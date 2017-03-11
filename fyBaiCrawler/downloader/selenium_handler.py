@@ -24,48 +24,50 @@ class PhantomJSDownloadHandler(object):
 
         self.cmd = 'phantomjs'
         self.script = '"{base_dir}{javascript_file}"'.format(base_dir=base_dir, javascript_file=javascript_file)
-
         self.options = settings.get('PHANTOMJS_OPTIONS', [])
-        self.wait_for_phantanjs = settings.get('PHATOMJS_SLEEPING', 0)
 
-        max_run = settings.get('PHATOMJS_INSTANCES', 5)
-        self.sem = defer.DeferredSemaphore(max_run)
         SignalManager(dispatcher.Any).connect(self._close, signal=signals.spider_closed)
 
     def download_request(self, request, spider):
-        """use semaphore to guard a phantomjs pool"""
-        return self.sem.run(self._wait_request, request, spider)
+        return self._wait_request(request, spider)
 
     def _wait_request(self, request, spider):
         logging.debug('New a phantomJs instance...')
         shell_process = ShellProcess(self.cmd, options=self.options, args=[self.script, request.url])
         shell_process.start()
 
-        def callback():
-            time.sleep(self.wait_for_phantanjs)
-            return shell_process.read()
-        dfd = threads.deferToThread(callback)
+        # 将进程的结果交给子线程来读
+        dfd = threads.deferToThread(lambda: shell_process.read())
+        # 读到的结果传递给回调函数self._response
         dfd.addCallback(self._response, shell_process, request, spider)
         return dfd
 
     def _response(self, results, shell_process, request, spider):
-        returncode, (stdout, stderr) = results
-        shell_process.stop()
+        """注意： 必须返回fired后的defer，不然会消耗信号量最后导致死锁
+        :param results:
+        :param shell_process:
+        :param request:
+        :param spider:
+        :return:
+        """
+        returncode, stdout = results
+        logging.debug(' ----> {url} process stop - {returncode}.'.format(url=request.url, returncode=returncode))
 
         url = request.url
         respcls = responsetypes.from_args(url=url, body=stdout)
-        if stdout.startswith("Usage"):
-            return self.build_response(stdout, respcls, 400, request, spider)
-        if stdout.startswith("FAIL"):
-            return self.build_response(stdout, respcls, 500, request, spider)
-        resp = self.build_response(stdout, respcls, 200, request, spider)
+        if returncode == 2:
+            resp = self.build_response(stdout, respcls, 400, request, spider)
+        elif returncode == 1:
+            resp = self.build_response(stdout, respcls, 500, request, spider)
+        else:
+            resp = self.build_response(stdout, respcls, 200, request, spider)
         return defer.succeed(resp)
 
     def build_response(self, stdout, respcls, status, request, spider):
         if status == 200:
             start1 = stdout.find("HelloWorld")
             start2 = stdout.rfind('{', 0, start1)
-            stdout = stdout[start2: ]
+            stdout = stdout[start2:]
         return respcls(url=request.url, status=status, body=stdout, encoding="utf-8")
 
     def _close(self):

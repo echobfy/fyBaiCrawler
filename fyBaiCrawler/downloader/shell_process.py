@@ -22,7 +22,7 @@ class ShellProcess(object):
 
         try:
             cmd = self.path
-            self.process = subprocess.Popen(cmd, close_fds=platform.system() != "Windows",
+            self.process = subprocess.Popen(cmd, close_fds=platform.system() != "Windows", bufsize=4096,
                                             stdout=PIPE, shell=True)
         except TypeError:
             raise
@@ -45,28 +45,15 @@ class ShellProcess(object):
                 (os.path.basename(self.path), str(e)))
 
     def read(self):
-        return self.process.returncode, self.process.communicate()
+        stdout, stderr = self.process.communicate()
+        retcode = self.process.poll()
+        if retcode:
+            return retcode, stdout
+        else:
+            return None, stdout
 
     def stop(self):
-        if self.process is None:
-            return
-
-        try:
-            if self.process:
-                for stream in [self.process.stdin,
-                               self.process.stdout,
-                               self.process.stderr]:
-                    try:
-                        stream.close()
-                    except AttributeError:
-                        pass
-                self.process.terminate()
-                self.process.kill()
-                self.process.wait()
-                self.process = None
-        except OSError:
-            # kill may not be available under windows environment
-            pass
+        pass
 
     def __del__(self):
         self.stop()

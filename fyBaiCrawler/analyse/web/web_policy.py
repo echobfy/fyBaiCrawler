@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from bs4 import BeautifulSoup
 from fyBaiCrawler.analyse import AnaylsePolicy
 
 
@@ -46,7 +47,7 @@ class UrlAnaylsePolicy(WebAnaylsePolicy):
         "友盟": ["cnzz.com"],                     # http://bbs.ngacn.cc/
         "诸葛": ["zhugeio.com"],                  # http://www.xin.com/beijing/
         "神策": ["sensorsdata.cn", "sensorsdata"],               # http://www.okoer.com/
-        "TalkingData": ["talkingdata.com"],
+        "TalkingData": ["talkingdata.com"],       # http://www.hunliji.com/
         "腾讯": ["tajs.qq.com"],
         "Mixpanel": ["mixpanel"],
         "Flurry": []
@@ -101,6 +102,43 @@ class ContentAnaylsePolicy(WebAnaylsePolicy):
                 if keyword in response['content']:
                     lst = anaylse_result.setdefault(self.keyword_2_company[keyword], [])
                     lst.append(keyword)
+        return anaylse_result
+
+
+class HTMLAnaylsePolicy(WebAnaylsePolicy):
+    """根据HTML内容分析
+    """
+    companies_url = {
+        "GrowingIO": ["dn-growing.qbox.me"],        # http://www.hunliji.com/
+        "百度": ["hm.baidu.com"],                  # http://www.thepaper.cn/
+        "Google": [
+            "googletagservices.com",            # http://www.hupu.com/
+            "google-analytics.com",              # http://bbs.ngacn.cc/
+            "googletagmanager.com",             # http://www.xin.com/beijing/
+            "google-analytics"
+        ],
+        "友盟": ["cnzz.com"],                     # http://bbs.ngacn.cc/
+        "诸葛": ["zhugeio.com", "zhugeio"],                  # http://www.xin.com/beijing/
+        "神策": ["sensorsdata.cn", "sensorsdata"],               # http://www.okoer.com/
+        "TalkingData": ["talkingdata.com", "talkingdata"],       # http://www.hunliji.com/
+        "腾讯": ["tajs.qq.com"],
+        "Mixpanel": ["mixpanel"],
+        "Flurry": []
+    }
+
+    url_2_company = reverse_map(companies_url)
+
+    def anaylse(self, page_data):
+        anaylse_result = {}
+        soup = BeautifulSoup(page_data, 'html.parser')
+
+        filter = self.url_2_company.keys()
+        for script in soup.find_all('script'):
+            for url in filter:
+                if url in script.get_text() or (script.has_attr('src') and url in script['src']):
+                    lst = anaylse_result.setdefault(self.url_2_company[url], [])
+                    lst.append(url)
+                    filter.remove(url)
         return anaylse_result
 
 

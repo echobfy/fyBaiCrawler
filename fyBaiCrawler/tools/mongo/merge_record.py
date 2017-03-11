@@ -18,8 +18,8 @@ from fyBaiCrawler.tools.mongo.merge_polices import AttributeMergePolicy
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-    # filename=BASE_DIR + '/logs/25pp/anaylse.log',
-    # filemode='w'
+    filename='anaylse.log',
+    filemode='w'
 )
 
 
@@ -74,8 +74,8 @@ if __name__ == '__main__':
     merge_instance = MergeRecord(
         (uri + 'apps', "wandoujia_apk"),
         (uri + 'itjuzi', "company_list"),
-        (uri + 'app_company', "app_company"),
-        (uri + 'app_company', "failed")
+        (uri + 'GrowingIOCompanies', "companies"),
+        (uri + 'GrowingIOCompanies', "apk_failed")
     )
 
     merge_instance.merge()
