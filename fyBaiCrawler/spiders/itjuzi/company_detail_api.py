@@ -81,12 +81,12 @@ class CompanyDetailSpider(scrapy.Spider):
         mongo_client = MongoUtils(uri=self.MONGO_URI)
         mongo_collection = mongo_client.get_collection(CompanyListSpider.MONGO_SUCC_STORE_COLLECTION)
         for start_url in self.start_urls:
-            for i, doc in enumerate(mongo_collection.find()):
-                if i > 100: break
+            for i, doc in enumerate(mongo_collection.find(no_cursor_timeout=True)):
                 if not doc.get('com_id'):
                     logging.warning(' ---> no com_id in doc for {com_id}:{com_name}.'.
                                     format(com_id=doc.get('com_id'), com_name=doc.get('com_name')))
                     continue
+                logging.debug(' ---> fetch request:{com_id}.'.format(com_id=doc.get('com_id')))
                 yield FormRequest(start_url,
                                   formdata={
                                       "com_id": doc['com_id'],
